@@ -26,8 +26,15 @@ class RandomUserAgentMiddleware(UserAgentMiddleware):
         super(RandomUserAgentMiddleware, self).__init__()
         self.user_agent = user_agent
         user_agent_list_file = settings.get('USER_AGENT_LIST')
-        with open(user_agent_list_file, 'r') as f:
-            self.user_agent_list = [line.strip() for line in f.readlines()]
+        if not user_agent_list_file:
+            # If USER_AGENT_LIST_FILE settings is not set,
+            # Use the default USER_AGENT or whatever was
+            # passed to the middleware.
+            ua = settings.get('USER_AGENT', user_agent)
+            self.user_agent_list = [ua]
+        else:
+            with open(user_agent_list_file, 'r') as f:
+                self.user_agent_list = [line.strip() for line in f.readlines()]
 
     @classmethod
     def from_crawler(cls, crawler):
