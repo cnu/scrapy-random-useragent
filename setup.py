@@ -2,26 +2,46 @@
 Setup script for PyPi
 """
 import codecs
+import re
 from setuptools import setup
 
-import random_useragent
 
 # Get the long description from the relevant file
 with codecs.open('README.rst', encoding='utf-8') as f:
     long_description = f.read()
 
+
+# Open the package file so we can read the meta data.
+with codecs.open('random_useragent.py', encoding='utf-8') as f:
+    package_file = f.read()
+
+
+def get_package_meta(meta_name):
+    """Return value of variable set in the package where said variable is
+    named in the Python meta format `__<meta_name>__`.
+    """
+    regex = "__{0}__ = ['\"]([^'\"]+)['\"]".format(meta_name)
+    return re.search(regex, package_file).group(1)
+
+
+version = get_package_meta('version')
+author = get_package_meta('author')
+email = get_package_meta('email')
+license = get_package_meta('license')
+
+
 setup(
     name='scrapy-random-useragent',
-    version=random_useragent.__version__,
+    version=version,
 
     description='Scrapy Middleware to set a random User-Agent for every Request.',
     long_description=long_description,
 
-    author=random_useragent.__author__,
-    author_email=random_useragent.__email__,
+    author=author,
+    author_email=email,
     url='https://github.com/cnu/scrapy-random-useragent',
 
-    license=random_useragent.__license__,
+    license=license,
 
     py_modules=['random_useragent'],
     platforms=['Any'],
