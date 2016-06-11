@@ -8,7 +8,7 @@ user-agents and sets a random one for each request.
 
 import random
 from scrapy import signals
-from scrapy.contrib.downloadermiddleware.useragent import UserAgentMiddleware
+from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware
 
 __author__ = "Srinivasan Rangarajan"
 __copyright__ = "Copyright 2014, Srinivasan Rangarajan"
